@@ -22,10 +22,33 @@ const AddBooks = () => {
   //  =================BOOKS ID FOR STORING THE BOOKS ID'S==========================
   const [bookId, setBookId] = useState(null);
 
+  // const [location, setLocation] = useState("");
+  // const [locationList, setLocationList] = useState([]);
+  // console.log(locationList)
+
+  // const locationBtn = () => {
+  //   const locationCollection = collection(db, "location");
+  //   addDoc(locationCollection, { location }).then(() => {
+  //     setLocation("");
+  //     console.log("location added successfully");
+  //   });
+  // };
+
+  // const locationView = async() => {
+  //   const locationCollection = collection(db, "location");
+  //   const locationData = await getDocs(locationCollection);
+  //   const filteredLocationData = locationData.docs.map((maping) => ({
+  //     ...maping.data(),
+  //     id: maping.id,
+  //   }));
+  //   console.log(filteredLocationData);
+  //   setLocationList(filteredLocationData)
+  // };
   //=================== CREATE======================================================
 
   const addBook = (e) => {
     e.preventDefault();
+    console.log("ddx");
 
     const booksCollection = collection(db, "books");
     // const bookData = { bookName, price, currency };
@@ -49,7 +72,6 @@ const AddBooks = () => {
       ...doc.data(),
       id: doc.id,
     }));
-    console.log(filteredData);
     setBookList(filteredData);
   };
 
@@ -64,27 +86,34 @@ const AddBooks = () => {
   //=============== UPDATE=======================================================
 
   const bookUpdate = () => {
+    console.log("bookId", bookId);
+
     const bookDoc = doc(db, "books", bookId);
     updateDoc(bookDoc, { bookName, price });
+    getBookList()
+   
   };
+
   //============== BOOK EDIT BUTTON FUNCTION=====================================
   const bookEdit = async (id) => {
     const bookDoc = doc(db, "books", id);
     const booksedit = await getDoc(bookDoc);
-    console.log(booksedit.id);
-    console.log(booksedit.data());
     setBookName(booksedit.data().bookName);
     setPrice(booksedit.data().price);
     setBookId(booksedit.id);
   };
+
   useEffect(() => {
     getBookList();
-    bookUpdate;
+    // bookUpdate;
+    // locationView();
+
     // bookDelete();
   }, [bookName, price]);
 
   return (
     <div>
+      {/* ===========BOOK ADD FIELD IN FIREBASE======================== */}
       <form onSubmit={addBook} className="addBookForm">
         <label>Book Name</label>
         <input
@@ -103,10 +132,10 @@ const AddBooks = () => {
           onChange={(e) => setPrice(e.target.value)}
         />
         <input type="submit" value="Add Book" />
-        <button onClick={bookUpdate}>Update</button>
+        <button type="button" onClick={bookUpdate}>Update</button>
       </form>
 
-      {/*=================== BOOK LISST ===============================================*/}
+      {/*=================== BOOK LISST IN SCREEN ===============================================*/}
 
       <div>
         {bookList.map((booklist) => (
@@ -125,6 +154,19 @@ const AddBooks = () => {
           </div>
         ))}
       </div>
+      {/* ========LOCATION TEST=========== */}
+      {/* <div>
+        <h2>Location Test</h2>
+        <input
+          type="text"
+          placeholder="enter your location"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+        />
+        <button onClick={locationBtn}>location add</button>
+      </div> */}
+      {/* ===========LOCATION LIST================ */}
+      <div>{}</div>
     </div>
   );
 };
